@@ -19,10 +19,10 @@ namespace Student_Assistant
         /// <param name="a">назва файла бд</param>
         public void Setcon(string a = "calendar")
         {
-            qLiteConnection = new SQLiteConnection("Data Source=" + a + ".db;Version=3;New=False;Compress=True;");
-            qLiteConnection.Open();
-            qLiteCommand = qLiteConnection.CreateCommand();
-            liteDataAdapter = new SQLiteDataAdapter(qLiteCommand);
+         //   qLiteConnection = new SQLiteConnection("Data Source=" + a + ".db;Version=3;New=False;Compress=True;");
+          //  qLiteConnection.Open();
+          //  qLiteCommand = qLiteConnection.CreateCommand();
+           // liteDataAdapter = new SQLiteDataAdapter(qLiteCommand);
             //liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(liteDataAdapter).GetUpdateCommand();
         }
         /// <summary>
@@ -33,8 +33,8 @@ namespace Student_Assistant
         {
             try
             {
-                MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
-                MainWindow.bd_calendar.liteDataAdapter.Update(dataSet);
+            //    MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
+              //  MainWindow.bd_calendar.liteDataAdapter.Update(dataSet);
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace Student_Assistant
             try
             {
                 dataSet.Clear();
-                MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
+               // MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
             }
             catch (Exception ex)
             {
@@ -63,6 +63,27 @@ namespace Student_Assistant
         /// <param name="com">команда</param>
         public void Comand(string com)
         {
-            qLiteCommand.CommandText = com;
+           // qLiteCommand.CommandText = com;
         }
     }
+
+    public class SQLiteDataAdapter
+    {
+        public void Fill(DataSet d)
+        {
+
+        }
+        public void Update(DataSet d)
+        {
+
+        }
+    }
+
+    public class SQLiteConnection
+    {
+    }
+
+    public class SQLiteCommand
+    {
+    }
+}

@@ -1,7 +1,6 @@
 ﻿using Student_Assistant.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -98,26 +97,27 @@ namespace Student_Assistant.Windows
                 {
                     using (SHA512 shaM = new SHA512Managed())
                     {
-                        DataSet dataSet;
                         string hash;
                         var data = Encoding.UTF8.GetBytes(pas1.Password + "");
                         hash = Convert.ToBase64String(shaM.ComputeHash(data));
-                        MainWindow.bd_calendar.Comand("select * from login where login=" + '"' + log1.Text + '"');
-                        dataSet = new DataSet();
-                        dataSet.Reset();
-                        MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-                        if (dataSet.Tables[0].Rows.Count > 0)
+
+                        var datalist = Data.calendar.LoginU.Any(x => x.Login == log1.Text);
+                        if (datalist)
                         {
                             MessageBox.Show("такий Логін існує ");
                             return;
                         }
-                        MainWindow.bd_calendar.Comand("insert into login values(null, " + '"' + log1.Text + '"' + ", " + '"' + hash + '"' + ");");
-                        MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-                        MainWindow.bd_calendar.Comand("select id from login where login=" + '"' + log1.Text + '"');
-                        dataSet.Reset();
-                        MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-                        MainWindow.bd_calendar.Comand("insert into user values(null, " + '"' + name1.Text + '"' + ",null," + Convert.ToInt32(dataSet.Tables[0].Rows[0][0]) + ",null,null);");
-                        MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
+
+                        Data.calendar.Users.Add(new User()
+                        {
+                            Name = name1.Text,
+                            LoginU = new LoginU()
+                            {
+                                Login = log1.Text,
+                                Password = hash
+                            }
+                        }) ;
+                        Data.calendar.SaveChanges();
                         grid_n.Visibility = Visibility.Hidden;
                         MessageBox.Show("успішно");
                     }

@@ -21,7 +21,7 @@ namespace Student_Assistant
     /// </summary>
     public partial class MainWindow : Window
     {
-       // static public BD bd_calendar;
+       static public BD bd_calendar;
         static public Grid mains;
         public MainWindow()
         {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using sqlit.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

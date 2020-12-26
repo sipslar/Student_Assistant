@@ -274,7 +274,7 @@ namespace Student_Assistant.Windows
 
                             w += start;
                         }
-                        MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
+                      //  MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
                         MainWindow.bd_calendar.liteDataAdapter.Update(datas);
                     }
                 }

@@ -50,7 +50,7 @@ namespace Student_Assistant.Windows
             com = "select * from user where id=" + '"' + index + '"';
             MainWindow.bd_calendar.Comand(com);
             dataSet.Reset();
-            MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
+          //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
         }
         void Bd_login()
         {
@@ -58,7 +58,7 @@ namespace Student_Assistant.Windows
             {
                 MainWindow.bd_calendar.Comand("select id,login from login where id= " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
                 dataS.Reset();
-                MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+              //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
                 log_q.Text = dataS.Tables[0].Rows[0]["login"].ToString();
             }
         }
@@ -88,7 +88,7 @@ namespace Student_Assistant.Windows
                     if (pas1.Password == "")
                     {
                         MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
-                        MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+                       // MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
                     }
                     else
                     {
@@ -98,7 +98,7 @@ namespace Student_Assistant.Windows
                             var data = Encoding.UTF8.GetBytes(pas1.Password + "");
                             hash = Convert.ToBase64String(shaM.ComputeHash(data));
                             MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "' , password = " + "'" + hash + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
-                            MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+                          //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
                         }
                         else
                         {
