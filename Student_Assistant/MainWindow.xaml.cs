@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Student_Assistant.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,14 @@ namespace Student_Assistant
     /// </summary>
     public partial class MainWindow : Window
     {
+       // static public BD bd_calendar;
+        static public Grid mains;
         public MainWindow()
         {
             InitializeComponent();
+            //bd_calendar = new BD();
+            mains = Mgrid;
+            Mgrid.Children.Add(new Login());
         }
     }
 }

@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Student_Assistant.Windows.Edit_user"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Student_Assistant.Windows"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#FF9126C3">
+        <TextBlock x:Name="name_o" HorizontalAlignment="Left" TextWrapping="Wrap" Text="І'мя" VerticalAlignment="Top" Margin="10,55,0,0" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="name" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Margin="10,74,0,0"/>
+        <TextBlock x:Name="lname_o" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Прізвище" VerticalAlignment="Top" Margin="10,95,0,0" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="lname" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Margin="10,115,0,0"/>
+        <TextBlock x:Name="grup_o" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Група" VerticalAlignment="Top" Margin="190,55,0,0" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="grup" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="64" Margin="190,74,0,0"/>
+        <Button Content="Назад" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Обновити" HorizontalAlignment="Left" Height="20" Margin="92,0,0,0" VerticalAlignment="Top" Width="64" Cursor="Wait" Click="Button_Click_1" />
+        <Button x:Name="B_user_in" Content="Зберегти" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Width="75" Click="B_user_in_Click" />
+        <Grid HorizontalAlignment="Center" Height="307" Margin="371,10,163,0" VerticalAlignment="Top" Width="266">
+            <TextBox x:Name="log_w" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="10,43,0,0"/>
+            <PasswordBox x:Name="pas1" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Width="156" Height="23"/>
+            <PasswordBox x:Name="pas2" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="156" Height="23"/>
+            <TextBlock x:Name="log_q" HorizontalAlignment="Left" Margin="10,22,0,0" TextWrapping="Wrap" Text="Логін" VerticalAlignment="Top" FontWeight="Bold"/>
+            <Button Content="Зберегти" HorizontalAlignment="Left" Margin="10,155,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+            <TextBlock HorizontalAlignment="Left" Margin="130,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" Text="Логін"/>
+            <TextBlock HorizontalAlignment="Left" Margin="171,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" Text="Пароль" FontSize="10"/>
+            <TextBlock HorizontalAlignment="Left" Margin="171,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="28" Width="76" FontSize="10"><Run Text="Пароль"/><Run Text=" "/><Run Text="перевірка"/></TextBlock>
+        </Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="135,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run FontSize="14" Text="І'мя"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="135,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="82" Height="17"><Run Text="Прізвище"/><LineBreak/><Run Text=""/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="259,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="19"><Run Text="Група"/><LineBreak/><Run FontSize="14" Text=""/></TextBlock>
+    </Grid>
+</UserControl>

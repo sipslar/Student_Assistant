@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Student_Assistant"
         mc:Ignorable="d"
         Title="Student Assistant" Height="450" Width="800">
-    <Grid>
 
-    </Grid>
+    <Grid x:Name="Mgrid"/>
 </Window>

@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="Student_Assistant.Windows.Subject_W"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Student_Assistant.Windows"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="gr_s" MouseMove="Gr_s_MouseMove">
+        <CheckBox x:Name="chbox" Content="редагувати" HorizontalAlignment="Left" Margin="167,10,0,0" VerticalAlignment="Top" Click="Chbox_Click" />
+        <Button x:Name="u_but" Content="зберегти" HorizontalAlignment="Left" Margin="275,10,0,0" VerticalAlignment="Top" Width="75" Click="U_but_Click" />
+        <Button Content="обновити" HorizontalAlignment="Left" Margin="388,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" />
+        <DataGrid x:Name="dgrid" Margin="0,129,10,10" SelectionChanged="Dgrid_SelectionChanged" Loaded="Dgrid_Loaded" BeginningEdit="Dgrid_BeginningEdit" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Назва" Binding="{Binding 'назва'}">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Бал" Binding="{Binding 'бал'}">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Максимальний бал" Binding="{Binding 'бал_max'}">
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="Перша робота">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'початок'}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'початок'}" >
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Половина робіт">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'половина'}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'половина'}">
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Остання робота">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'кінець'}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding 'кінець'}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Половина лаб" Binding="{Binding 'пол'}">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Додати" Click="Add_DRow_Click"/>
+                    <MenuItem Header="Створити" Click="Create_DRow_Click"/>
+                    <MenuItem Header="Редагувати" Click="Edit_DRow_Click"/>
+                    <MenuItem Header="Вилучити" Click="Exclude_DRow_Click"/>
+                    <MenuItem Header="Видалити" Click="Remove_DRow_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <CheckBox x:Name="All_cr" Content="Всі створені елементи" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Click="All_cr_Click"/>
+        <Button Content="Головне меню" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="74" Click="Button_Click_1" />
+        <Button x:Name="CR_r" Content="Скласти роклад" HorizontalAlignment="Left" Margin="120,50,0,0" VerticalAlignment="Top" Width="95" Click="Button_Click_2" Visibility="Hidden"/>
+        <Button x:Name="butR" Content="Розклад" HorizontalAlignment="Left" Margin="9,75,0,0" VerticalAlignment="Top" Width="55" Click="Button_Click_3">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="7"/>
+            </Button.Effect>
+        </Button>
+        <Grid x:Name="vGr" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,114,0,0" Height="138" Width="551">
+            <Rectangle x:Name="rtg" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="21" Margin="0,-20,0,0" Stroke="Black" VerticalAlignment="Top" Width="33" RadiusY="4.167" RadiusX="4.167" RenderTransformOrigin="0.495,0.493" MouseLeftButtonDown="Rtg_MouseLeftButtonDown" MouseLeftButtonUp="Rtg_MouseLeftButtonUp" MouseRightButtonUp="Rtg_MouseRightButtonUp" Cursor="Hand" />
+            <DataGrid x:Name="grid_all" Height="115" Margin="0,20,0,0" VerticalAlignment="Top" Width="548" HorizontalAlignment="Left" >
+            </DataGrid>
+            <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Button_Click_4"/>
+        </Grid>
+
+    </Grid>
+</UserControl>
