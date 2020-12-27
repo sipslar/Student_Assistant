@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Student_Assistant.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -173,15 +174,9 @@ namespace Student_Assistant.Windows
         }
         void Bd_main()
         {
-            using (DataSet dataSet = new DataSet())
-            {
-                MainWindow.bd_calendar.Comand("select * from user where id=" + '"' + index + '"');
-                dataSet.Reset();
-                MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-                name.Text = dataSet.Tables[0].Rows[0][1].ToString();
-                fname.Text = dataSet.Tables[0].Rows[0][2].ToString();
-                dataSet.Reset();
-            }
+            var userdata = Data.calendar.Users.FirstOrDefault(x => x.UserId == index);
+            name.Text = userdata.Name;
+            fname.Text = userdata.FName;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -190,12 +185,12 @@ namespace Student_Assistant.Windows
         DataSet dataS;
         void Bd_roz()
         {
-            dataS = new DataSet();
-            MainWindow.bd_calendar.Comand("select id_subject,(select subject.назва from subject where subject.id = id_subject) as предмет, назва, дата, виконання,Cast ((JulianDay(date(дата)) - JulianDay(date('now'))) As Integer)as дедлайн from work where (work.id_user=" + index + " and ((дедлайн<=0 and здано=0) or дедлайн=0)) ORDER BY дедлайн ASC");
-            dataS.Reset();
-            MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+            var datalist = Data.calendar.Works.Where(x => x.UserId == index && x.Passed == false).Select(x => new { id_subject = x.SubjectId, Предмет = x.Subject.Name, Назва = x.Name, Дата = x.Date, Дедлайн = Math.Round(x.Date.Subtract(DateTime.Now).TotalDays, 1) }).ToList();
+            // MainWindow.bd_calendar.Comand("select id_subject,(select subject.назва from subject where subject.id = id_subject) as предмет, назва, дата, виконання,Cast ((JulianDay(date(дата)) - JulianDay(date('now'))) As Integer)as дедлайн from work where (work.id_user=" + index + " and ((дедлайн<=0 and здано=0) or дедлайн=0)) ORDER BY дедлайн ASC");
+            dataS = Data.ToDataSet(datalist);
             dgrid.ItemsSource = dataS.Tables[0].DefaultView;
         }
+
         private void Dgrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             DataGridRow product = e.Row;
@@ -203,7 +198,7 @@ namespace Student_Assistant.Windows
             {
                 return;
             }
-            DateTime row_time = (DateTime)((DataRowView)product.Item).Row["дата"];
+            DateTime row_time = (DateTime)((DataRowView)product.Item).Row["Дата"];
             if (DateTime.Now > row_time)
             {
                 product.Background = Work_W.dedline_c;
@@ -216,8 +211,9 @@ namespace Student_Assistant.Windows
 
         private void Dgrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //    DataRow row_ch = ((DataRowView)e.AddedItems[0]).Row;
             DataRow row_ch = ((DataRowView)e.AddedItems[0]).Row;
-            MainWindow.mains.Children.Add(new Work_W(Convert.ToInt32(row_ch["id_subject"]), index, (string)row_ch["назва"]));
+            MainWindow.mains.Children.Add(new Work_W(Convert.ToInt32(row_ch["id_subject"]), index, (string)row_ch["Назва"]));
         }
 
         private void Dgrid_Loaded(object sender, RoutedEventArgs e)

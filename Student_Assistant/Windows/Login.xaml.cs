@@ -30,6 +30,7 @@ namespace Student_Assistant.Windows
 
             MainWindow.mains.Children.Clear();
             Data.calendar = new CalendarContext();
+            var datalistf = Data.calendar.LoginU.FromSqlRaw("SELECT 1  where exists(SELECT * FROM LoginU)");
             timer = new Timer
             {
                 Interval = 1
@@ -48,11 +49,15 @@ namespace Student_Assistant.Windows
                 string hash;
                 var data = Encoding.UTF8.GetBytes(password.Password + "");
                 hash = Convert.ToBase64String(shaM.ComputeHash(data));
-                var datalist = Data.calendar.LoginU.Where(x => x.Login == login.Text && x.Password == hash).ToList();
+                var datalist = Data.calendar.LoginU.Where(x => x.Login == login.Text && x.Password == hash).Select(x => x.LoginUId).ToList();
                 if (datalist.Count == 1)
                 {
-                    int indx = datalist[0].LoginUId;
-                    MainWindow.mains.Children.Add(new Main_W(indx));
+                    var datalist2 = Data.calendar.Users.Where(x => x.LoginUId == datalist[0]).Select(x => x.UserId).ToList();
+                    if (datalist2.Count == 1)
+                    {
+                        int indx = datalist2[0];
+                        MainWindow.mains.Children.Add(new Main_W(indx));
+                    }
                 }
                 else
                 {
@@ -116,7 +121,7 @@ namespace Student_Assistant.Windows
                                 Login = log1.Text,
                                 Password = hash
                             }
-                        }) ;
+                        });
                         Data.calendar.SaveChanges();
                         grid_n.Visibility = Visibility.Hidden;
                         MessageBox.Show("успішно");
