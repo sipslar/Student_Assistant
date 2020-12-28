@@ -61,106 +61,106 @@ namespace Student_Assistant.Windows
                 }
             }
         }
-            private void Start()
+        private void Start()
+        {
+            // MainWindow.bd_calendar.Comand("select *,Cast ((JulianDay(date(дата)) - JulianDay(date('now'))) As Integer)as дедлайн from work where id_subject =" + index_s + " and id_user = " + index_u);
+            var datalist = Data.calendar.Works.Where(x => x.UserId == index_u && x.SubjectId == index_s).Select(x => new { Дедлайн = Math.Round(x.Date.Subtract(DateTime.Now).TotalDays, 1), дата = x.Date, id_subject = x.SubjectId, id_user = x.UserId, назва = x.Name, бал = x.Mark, бал_max = x.MarkMax, здано = x.Passed }).ToList();
+
+            dataSet = Data.ToDataSet(datalist);
+            dgrid_w.ItemsSource = dataSet.Tables[0].DefaultView;
+        }
+
+        private void Cbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
             {
-                // MainWindow.bd_calendar.Comand("select *,Cast ((JulianDay(date(дата)) - JulianDay(date('now'))) As Integer)as дедлайн from work where id_subject =" + index_s + " and id_user = " + index_u);
-                var datalist = Data.calendar.Works.Where(x => x.UserId == index_u && x.SubjectId == index_s).Select(x => new { Дедлайн = Math.Round(x.Date.Subtract(DateTime.Now).TotalDays, 1),  дата= x.Date, id_subject = x.SubjectId, id_user = x.UserId, назва = x.Name, бал = x.Mark, бал_max = x.MarkMax, здано = x.Passed }).ToList();
+                ComboBox sd = (ComboBox)sender;
+                string name = sd.SelectedValue.ToString();
 
-                dataSet = Data.ToDataSet(datalist);
-                dgrid_w.ItemsSource = dataSet.Tables[0].DefaultView;
-            }
-
-            private void Cbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            {
-                try
+                var datalist = Data.calendar.Subjects.Where(x => x.Name == name).Select(x => x.SubjectId).ToList();
+                if (datalist.Count == 1)
                 {
-                    ComboBox sd = (ComboBox)sender;
-                    string name = sd.SelectedValue.ToString();
-
-                    MainWindow.bd_calendar.Comand("select id from subject where назва = " + '"' + name + '"');
+                    index_s = datalist[0];
                     dataSet.Clear();
-                    MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-
-                    index_s = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
-
-                    MainWindow.bd_calendar.Comand("select *,Cast ((JulianDay(date(дата)) - JulianDay(date('now'))) As Integer)as дедлайн from work where work.id_subject = (select id from subject where назва = " + '"' + name + '"' + ") and work.id_user = " + index_u);
-                    dataSet.Clear();
-                    MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.MessageBox.Show(ex.Message + "\n\n не найдено елемент");
+                    Start();
                 }
 
             }
-
-            private void Save()
+            catch (Exception ex)
             {
-                try
-                {
-                    int y = dataSet.Tables[0].Rows.Count;
-                    var f = System.DBNull.Value;
+                System.Windows.MessageBox.Show(ex.Message + "\n\n не найдено елемент");
+            }
 
-                    for (int i = 0; i < y; i++)
+        }
+
+        private void Save()
+        {
+            try
+            {
+                int y = dataSet.Tables[0].Rows.Count;
+                var f = System.DBNull.Value;
+
+                for (int i = 0; i < y; i++)
+                {
+                    if (dataSet.Tables[0].Rows[i]["id_user"] == f || Convert.ToInt32(dataSet.Tables[0].Rows[i]["id_user"]) != index_u)
                     {
-                        if (dataSet.Tables[0].Rows[i]["id_user"] == f || Convert.ToInt32(dataSet.Tables[0].Rows[i]["id_user"]) != index_u)
-                        {
-                            dataSet.Tables[0].Rows[i]["id_user"] = index_u;
-                        }
-                        if (dataSet.Tables[0].Rows[i]["id_subject"] == f || Convert.ToInt32(dataSet.Tables[0].Rows[i]["id_subject"]) != index_s)
-                        {
-                            dataSet.Tables[0].Rows[i]["id_subject"] = index_s;
-                        }
+                        dataSet.Tables[0].Rows[i]["id_user"] = index_u;
                     }
-
-                    // MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
-                    MainWindow.bd_calendar.liteDataAdapter.Update(dataSet);
+                    if (dataSet.Tables[0].Rows[i]["id_subject"] == f || Convert.ToInt32(dataSet.Tables[0].Rows[i]["id_subject"]) != index_s)
+                    {
+                        dataSet.Tables[0].Rows[i]["id_subject"] = index_s;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    System.Windows.MessageBox.Show(ex.Message + "\n\n Помилка в збереженні роботи");
-                }
-            }
-            private void U_but_Click(object sender, RoutedEventArgs e)
-            {
-                Save();
-            }
 
-            private void Chbox_Click(object sender, RoutedEventArgs e)
-            {
-                CheckBox dsd = (CheckBox)sender;
-                if (dsd.IsChecked == true)
-                {
-                    u_but.Visibility = Visibility.Visible;
-                    u_but.IsEnabled = true;
-                    dgrid_w.IsReadOnly = false;
-                }
-                else
-                {
-                    u_but.Visibility = Visibility.Hidden;
-                    u_but.IsEnabled = false;
-                    dgrid_w.IsReadOnly = true;
-                }
+                // MainWindow.bd_calendar.liteDataAdapter.UpdateCommand = new SQLiteCommandBuilder(MainWindow.bd_calendar.liteDataAdapter).GetUpdateCommand();
+                Data.calendar.SaveChanges();
+               // MainWindow.bd_calendar.liteDataAdapter.Update(dataSet);
             }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message + "\n\n Помилка в збереженні роботи");
+            }
+        }
+        private void U_but_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+        }
 
-            private void Button_Click(object sender, RoutedEventArgs e)
+        private void Chbox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox dsd = (CheckBox)sender;
+            if (dsd.IsChecked == true)
             {
-                BD.Update(dataSet);
+                u_but.Visibility = Visibility.Visible;
+                u_but.IsEnabled = true;
+                dgrid_w.IsReadOnly = false;
             }
+            else
+            {
+                u_but.Visibility = Visibility.Hidden;
+                u_but.IsEnabled = false;
+                dgrid_w.IsReadOnly = true;
+            }
+        }
 
-            private void Button_Click_1(object sender, RoutedEventArgs e)
-            {
-                dataSet.Reset();
-                dataSet.Dispose();
-                Map.Main_w(index_u);
-            }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            BD.Update(dataSet);
+        }
 
-            private void Button_Click_2(object sender, RoutedEventArgs e)
-            {
-                dataSet.Reset();
-                dataSet.Dispose();
-                Map.Subject_W(index_u);
-            }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            dataSet.Reset();
+            dataSet.Dispose();
+            Map.Main_w(index_u);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            dataSet.Reset();
+            dataSet.Dispose();
+            Map.Subject_W(index_u);
+        }
         public static SolidColorBrush dedline_c = new SolidColorBrush(Colors.Red);
         public static SolidColorBrush now_c = new SolidColorBrush(Colors.LightBlue);
         public static SolidColorBrush dedline_now_c = new SolidColorBrush(Colors.Yellow);

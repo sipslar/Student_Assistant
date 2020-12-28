@@ -13,8 +13,7 @@ namespace Student_Assistant.Models
         public string Login { get; set; }
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-     //   public User User { get; set; }
+        public User User { get; set; }
 
     }
 }

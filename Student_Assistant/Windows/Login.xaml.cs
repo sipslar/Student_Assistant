@@ -49,15 +49,12 @@ namespace Student_Assistant.Windows
                 string hash;
                 var data = Encoding.UTF8.GetBytes(password.Password + "");
                 hash = Convert.ToBase64String(shaM.ComputeHash(data));
-                var datalist = Data.calendar.LoginU.Where(x => x.Login == login.Text && x.Password == hash).Select(x => x.LoginUId).ToList();
+            
+                var datalist = Data.calendar.LoginU.Where(x => x.Login == login.Text && x.Password == hash).Select(x => x.User.UserId).ToList();
                 if (datalist.Count == 1)
                 {
-                    var datalist2 = Data.calendar.Users.Where(x => x.LoginUId == datalist[0]).Select(x => x.UserId).ToList();
-                    if (datalist2.Count == 1)
-                    {
-                        int indx = datalist2[0];
-                        MainWindow.mains.Children.Add(new Main_W(indx));
-                    }
+                    int indx = datalist[0];
+                    MainWindow.mains.Children.Add(new Main_W(indx));
                 }
                 else
                 {

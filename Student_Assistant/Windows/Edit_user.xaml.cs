@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Student_Assistant.Models;
+using System;
 using System.Collections.Generic;
-using System.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,9 +27,8 @@ namespace Student_Assistant.Windows
         {
             InitializeComponent();
         }
-        string com = "";
         private readonly int index;
-        DataSet dataSet;
+        private User user;
         public Edit_user(int indx)
         {
             InitializeComponent();
@@ -40,27 +40,23 @@ namespace Student_Assistant.Windows
         }
         void Up_d()
         {
-            name_o.Text = dataSet.Tables[0].Rows[0]["імя"].ToString();
-            lname_o.Text = dataSet.Tables[0].Rows[0]["прізвище"].ToString();
-            grup_o.Text = dataSet.Tables[0].Rows[0]["група"].ToString();
+            name_o.Text = user.Name;
+            lname_o.Text = user.FName;
+            grup_o.Text = user.Grup;
         }
         void Bd_main()
         {
-            dataSet = new DataSet();
-            com = "select * from user where id=" + '"' + index + '"';
-            MainWindow.bd_calendar.Comand(com);
-            dataSet.Reset();
-          //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataSet);
+            var rez = Data.calendar.Users.Include(x => x.LoginU).FirstOrDefault(x => x.UserId == index);
+            if (rez != null)
+            {
+                user = rez;
+            }
         }
         void Bd_login()
         {
-            using (DataSet dataS = new DataSet())
-            {
-                MainWindow.bd_calendar.Comand("select id,login from login where id= " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
-                dataS.Reset();
-              //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
-                log_q.Text = dataS.Tables[0].Rows[0]["login"].ToString();
-            }
+
+            log_q.Text = user.LoginU.Login;
+
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -74,8 +70,6 @@ namespace Student_Assistant.Windows
             {
                 try
                 {
-                    DataSet dataS = new DataSet();
-                    dataS.Reset();
                     string login = "";
                     if (log_w.Text == "")
                     {
@@ -87,8 +81,8 @@ namespace Student_Assistant.Windows
                     }
                     if (pas1.Password == "")
                     {
-                        MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
-                       // MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+                        // MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
+                        user.LoginU.Login = login;
                     }
                     else
                     {
@@ -97,14 +91,17 @@ namespace Student_Assistant.Windows
                             string hash;
                             var data = Encoding.UTF8.GetBytes(pas1.Password + "");
                             hash = Convert.ToBase64String(shaM.ComputeHash(data));
-                            MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "' , password = " + "'" + hash + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
-                          //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
+                            // MainWindow.bd_calendar.Comand("update login set login = " + "'" + login + "' , password = " + "'" + hash + "'" + " where id = " + Convert.ToInt32(dataSet.Tables[0].Rows[0]["login"]));
+                            user.LoginU.Login = login;
+                            user.LoginU.Password = hash;
+                            //  MainWindow.bd_calendar.liteDataAdapter.Fill(dataS);
                         }
                         else
                         {
                             MessageBox.Show("Паролі не збігаються");
                         }
                     }
+                    Data.calendar.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -117,31 +114,30 @@ namespace Student_Assistant.Windows
             bool a = false;
             if (name.Text != "")
             {
-                dataSet.Tables[0].Rows[0]["імя"] = name.Text;
+                user.Name = name.Text;
                 a = true;
             }
             if (lname.Text != "")
             {
-                dataSet.Tables[0].Rows[0]["прізвище"] = lname.Text;
+                user.FName = lname.Text;
                 a = true;
             }
             if (grup.Text != "")
             {
-                dataSet.Tables[0].Rows[0]["група"] = grup.Text;
+                user.Grup = grup.Text;
                 a = true;
             }
             if (a == true)
             {
-                MainWindow.bd_calendar.Comand(com);
-                BD.Save(dataSet);
+                Data.calendar.SaveChanges();
+                Up_d();
             }
-            Up_d();
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            MainWindow.bd_calendar.Comand(com);
-            BD.Update(dataSet);
+            Bd_main();
             Up_d();
         }
     }
